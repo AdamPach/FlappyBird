@@ -1,15 +1,14 @@
 import pygame
 
-BIRD_WIDTH = 34
-BIRD_HEIGHT = 24
-
 class Bird:
 
-    def __init__(self, WIN_H):
+    def __init__(self, WIN_H, birdWidth, birdHeight):
         self.__Y_POS =  WIN_H / 2
         self.__X_POS = 100
         self.__GRAVITY = 0
         self.__ROTATE = 0
+        self.__BIRD_WIDTH = birdWidth
+        self.__BIRD_HEIGHT = birdHeight
 
     def jump(self):
         self.__GRAVITY = 10
@@ -23,7 +22,10 @@ class Bird:
         self.__Y_POS -= self.__GRAVITY
 
     def getBirdRect(self):
-        return pygame.Rect(self.__X_POS, self.__Y_POS, BIRD_WIDTH, BIRD_HEIGHT)
+        return pygame.Rect(self.__X_POS, self.__Y_POS, self.__BIRD_WIDTH, self.__BIRD_HEIGHT)
+
+    def setRectFromControl(self, controlRect):
+        self.__Y_POS = controlRect.y
 
     def __controllRotate(self):
         if self.__GRAVITY == 0:

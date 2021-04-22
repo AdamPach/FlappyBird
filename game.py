@@ -15,11 +15,13 @@ FPS = 30
 BACKGROUND = pygame.image.load(os.path.join("assets", "bg.png"))
 BIRD_ASSETS = pygame.image.load(os.path.join("assets", "bird2.png"))
 
+BIRD_WIDTH = 34
+BIRD_HEIGHT = 24
 
 def game():
     clock = pygame.time.Clock()
     run = True
-    bird = birdy.Bird(WINDOW_HEIGHT)
+    bird = birdy.Bird(WINDOW_HEIGHT, BIRD_WIDTH, BIRD_HEIGHT)
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -31,6 +33,8 @@ def game():
                 bird.jump()
         birdImage = pygame.transform.rotate(BIRD_ASSETS, bird.getRotate())
         bird.gravity()
+        controlBird(bird)
+        #Zde príjdou další eventy pro chytani ptaka
         draw(bird, birdImage)
 
 
@@ -39,3 +43,11 @@ def draw(bird, birdImage):
     WINDOW.blit(BACKGROUND, (0, 0))
     WINDOW.blit(birdImage, (birdRect.x,birdRect.y))
     pygame.display.update()
+
+def controlBird(bird):
+    birdRect = bird.getBirdRect()
+    if (birdRect.y + BIRD_HEIGHT) >= WINDOW_HEIGHT:
+        birdRect.y = WINDOW_HEIGHT - BIRD_HEIGHT
+    elif birdRect.y <= 0:
+        birdRect.y = 0
+    bird.setRectFromControl(birdRect)
