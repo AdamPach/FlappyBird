@@ -18,6 +18,8 @@ BIRD_ASSETS = pygame.image.load(os.path.join("assets", "bird2.png"))
 BIRD_WIDTH = 34
 BIRD_HEIGHT = 24
 
+BIRD_COLIDE_WALL = pygame.USEREVENT + 1
+
 def game():
     clock = pygame.time.Clock()
     run = True
@@ -34,7 +36,9 @@ def game():
         birdImage = pygame.transform.rotate(BIRD_ASSETS, bird.getRotate())
         bird.gravity()
         controlBird(bird)
-        #Zde príjdou další eventy pro chytani ptaka
+        for event in pygame.event.get():
+            if event.type == BIRD_COLIDE_WALL:
+                run = False
         draw(bird, birdImage)
 
 
@@ -47,7 +51,6 @@ def draw(bird, birdImage):
 def controlBird(bird):
     birdRect = bird.getBirdRect()
     if (birdRect.y + BIRD_HEIGHT) >= WINDOW_HEIGHT:
-        birdRect.y = WINDOW_HEIGHT - BIRD_HEIGHT
+        pygame.event.post(pygame.event.Event(BIRD_COLIDE_WALL))
     elif birdRect.y <= 0:
-        birdRect.y = 0
-    bird.setRectFromControl(birdRect)
+        pygame.event.post(pygame.event.Event(BIRD_COLIDE_WALL))

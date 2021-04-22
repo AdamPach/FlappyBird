@@ -24,8 +24,6 @@ class Bird:
     def getBirdRect(self):
         return pygame.Rect(self.__X_POS, self.__Y_POS, self.__BIRD_WIDTH, self.__BIRD_HEIGHT)
 
-    def setRectFromControl(self, controlRect):
-        self.__Y_POS = controlRect.y
 
     def __controllRotate(self):
         if self.__GRAVITY == 0:
