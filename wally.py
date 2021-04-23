@@ -5,6 +5,7 @@ class Wall:
 
     def __init__(self, topWallHeight, freeSpace, xPos):
         self.__topWallHeight = topWallHeight
+        self.__WallHeight = self.__topWallHeight + 320
         self.__freeSpace = freeSpace
         self.__X_POS = xPos
         self.__Y_POS = 0
@@ -13,7 +14,7 @@ class Wall:
         self.__BOTT_HEIGHT = 512 - self.__Y_BOTT_POS
 
     def getWallRects(self):
-        return pygame.Rect(self.__X_POS, self.__Y_POS, self.__WIDTH, self.__topWallHeight), pygame.Rect(self.__X_POS, self.__Y_BOTT_POS, self.__WIDTH, self.__BOTT_HEIGHT)
+        return pygame.Rect(self.__X_POS, self.__Y_POS - 320 , self.__WIDTH, self.__WallHeight), pygame.Rect(self.__X_POS, self.__Y_BOTT_POS, self.__WIDTH, self.__BOTT_HEIGHT)
 
     def movingWalls(self):
         self.__controlWall()
@@ -21,6 +22,7 @@ class Wall:
 
     def __regenWall(self):
         self.__topWallHeight = random.randint(50,280)
+        self.__WallHeight = self.__topWallHeight + 320
         self.__X_POS = 300
         self.__Y_BOTT_POS = self.__topWallHeight + self.__freeSpace
         self.__BOTT_HEIGHT = 512 - self.__Y_BOTT_POS
