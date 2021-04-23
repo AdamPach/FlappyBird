@@ -30,3 +30,6 @@ class Wall:
     def __controlWall(self):
         if self.__X_POS < 0 - self.__WIDTH:
             self.__regenWall()
+
+    def getPassWall(self):
+        return pygame.Rect(self.__X_POS + (self.__WIDTH/2), self.__Y_POS + self.__topWallHeight, self.__WIDTH/2, self.__freeSpace)
