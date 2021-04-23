@@ -41,12 +41,15 @@ def game():
     run = True
     life = False
     bird = birdy.Bird(WINDOW_HEIGHT, BIRD_WIDTH, BIRD_HEIGHT)
-    walls = [wally.Wall(random.randint(50,280), WALL_FREE_SPACE, 340), wally.Wall(random.randint(50,280) , WALL_FREE_SPACE, 510),]
+    walls = [wally.Wall(random.randint(50,280), WALL_FREE_SPACE, 340),
+             wally.Wall(random.randint(50,280) , WALL_FREE_SPACE, 510),]
     base = pygame.Rect(0, 480, WINDOW_WIDTH, 32)
+    gameRun = False
     points = 0
     maxPoints = 0
     while run:
         if life:
+            gameRun = True
             clock.tick(FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -69,11 +72,15 @@ def game():
             draw(bird, birdImage, walls, base)
         else:
             clock.tick(FPS)
-            if points > 0:
+            if gameRun:
                 bird = birdy.Bird(WINDOW_HEIGHT, BIRD_WIDTH, BIRD_HEIGHT)
                 walls = [wally.Wall(random.randint(50, 280), WALL_FREE_SPACE, 340),
                          wally.Wall(random.randint(50, 280), WALL_FREE_SPACE, 510), ]
-                points = 0
+                points = int(points / 7)
+                if points > maxPoints:
+                    maxPoints = points
+                print(points)
+                gameRun = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
@@ -81,17 +88,15 @@ def game():
                     run = False
                 elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
                     bird.jump()
+                    points = 0
                     life = True
             drawOutsideGame(bird, base)
+    pygame.quit()
 
 
 def draw(bird, birdImage, walls, base):
     birdRect = bird.getBirdRect()
-    #wallTopRect, wallBottRect = wall.getWallRects()
     WINDOW.blit(BACKGROUND, (0, 0))
-    #WINDOW.blit(TOP_WALL_ASSET, (wallTopRect.x, wallTopRect.y))
-    #pygame.draw.rect(WINDOW, RED, wallTopRect)
-    #WINDOW.blit(BOTTOM_WALL_ASSET, (wallBottRect.x, wallBottRect.y))
     drawWalls(walls)
     WINDOW.blit(BASSE_ASSET, (base.x, base.y))
     WINDOW.blit(birdImage, (birdRect.x,birdRect.y))
@@ -100,9 +105,9 @@ def draw(bird, birdImage, walls, base):
 def drawWalls(walls):
     for wall in walls:
         wallTopRect, wallBottRect = wall.getWallRects()
-        pygame.draw.rect(WINDOW, RED, wallTopRect)
-        WINDOW.blit(TOP_WALL_ASSET, (wallBottRect.x, wallBottRect.y))
+        WINDOW.blit(TOP_WALL_ASSET, (wallTopRect.x, wallTopRect.y))
         WINDOW.blit(BOTTOM_WALL_ASSET, (wallBottRect.x, wallBottRect.y))
+
 
 def drawOutsideGame(bird,base):
     birdRect = bird.getBirdRect()
